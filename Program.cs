@@ -10,7 +10,8 @@ builder.Services.AddSession(options =>
 {
     options.Cookie.Name = ".super.sector.cookie";
     options.IdleTimeout = TimeSpan.FromSeconds(30);
-    options.IOTimeout = TimeSpan.FromSeconds(10);
+    // options.IOTimeout = TimeSpan.FromSeconds(10);
+     options.Cookie.MaxAge = TimeSpan.FromDays(1);
 });
 
 var app = builder.Build();
