@@ -8,10 +8,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.Cookie.Name = ".super.secter.cookie";
-    options.IdleTimeout = TimeSpan.FromSeconds(1);
+    options.Cookie.Name = ".request.count";
+    options.IdleTimeout = TimeSpan.FromSeconds(5);
     // options.Cookie.Expiration = TimeSpan.FromSeconds(10);
-    // options.Cookie.MaxAge = TimeSpan.FromDays(1);
+    // options.IOTimeout = TimeSpan.FromSeconds(10);
+    // options.Cookie.MaxAge = TimeSpan.FromSeconds(10);
 });
 
 var app = builder.Build();
