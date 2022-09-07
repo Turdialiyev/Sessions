@@ -1,19 +1,31 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
-namespace Controllers;
+namespace Cookies.Controllers;
 
-[Route("[controller]")]
 [ApiController]
-public class CasheController : Controller
+[Route("api/[controller]")]
+public class CacheCotroller : ControllerBase
 {
+    private readonly IMemoryCache _memoryCache;
+    public CacheCotroller(IMemoryCache memoryCashe) => _memoryCache = memoryCashe;
+
+
     [HttpGet]
-    public IActionResult GetHour()
+    public IActionResult Get()
     {
-        var count = Int32.Parse(HttpContext.Session.GetString("count") ?? "0");
-        HttpContext.Session.SetString("count", (count += 1).ToString());
-        
-        return Ok(count);
+        DateTime currentDate;
+        var alarediyExist = _memoryCache.TryGetValue("DateTime", out currentDate);
+
+        if (!alarediyExist || DateTime.UtcNow.Second - currentDate.Second > 30)
+        {
+            currentDate = DateTime.Now;
+            var cacheEntryOption = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(5));
+
+            _memoryCache.Set("DateTime", currentDate, cacheEntryOption);
+        }
+        return Ok(currentDate);
     }
+
 
 }

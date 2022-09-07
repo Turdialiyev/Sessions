@@ -5,14 +5,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddMemoryCache();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = ".request.count";
-    options.IdleTimeout = TimeSpan.FromSeconds(5);
-    // options.Cookie.Expiration = TimeSpan.FromSeconds(10);
-    // options.IOTimeout = TimeSpan.FromSeconds(10);
-    // options.Cookie.MaxAge = TimeSpan.FromSeconds(10);
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.MaxAge = TimeSpan.FromSeconds(30);
 });
 
 var app = builder.Build();
