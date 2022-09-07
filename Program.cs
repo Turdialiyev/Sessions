@@ -6,12 +6,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddMemoryCache();
-builder.Services.AddSession(options => 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
 {
-    options.Cookie.Name = ".super.sector.cookie";
-    options.IdleTimeout = TimeSpan.FromSeconds(30);
-    // options.IOTimeout = TimeSpan.FromSeconds(10);
-     options.Cookie.MaxAge = TimeSpan.FromDays(1);
+    options.Cookie.Name = ".request.count";
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.MaxAge = TimeSpan.FromSeconds(30);
 });
 
 var app = builder.Build();
@@ -24,8 +24,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseSession();
 
 app.MapControllers();
-
 app.Run();
