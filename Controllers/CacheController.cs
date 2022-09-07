@@ -18,6 +18,7 @@ public class CacheCotroller : ControllerBase
 
         if (!alarediyExist)
         {
+            
             time = DateTime.Now.ToString("HH:mm:ss");
             var cacheEntryOption = new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(TimeSpan.FromSeconds(5));
