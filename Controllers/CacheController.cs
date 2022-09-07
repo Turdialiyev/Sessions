@@ -14,17 +14,17 @@ public class CacheCotroller : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        DateTime currentDate;
-        var alarediyExist = _memoryCache.TryGetValue("DateTime", out currentDate);
+        var time = DateTime.Now.ToString("HH:mm:ss");
+        var alarediyExist = _memoryCache.TryGetValue("DateTime", out time);
 
-        if (!alarediyExist || DateTime.UtcNow.Second - currentDate.Second > 30)
+        if (!alarediyExist)
         {
-            currentDate = DateTime.Now;
+            time = DateTime.Now.ToString("HH:mm:ss");
             var cacheEntryOption = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(5));
 
-            _memoryCache.Set("DateTime", currentDate, cacheEntryOption);
+            _memoryCache.Set("DateTime", time, cacheEntryOption);
         }
-        return Ok(currentDate);
+        return Ok(time);
     }
 
 
