@@ -10,21 +10,21 @@ public class CacheCotroller : ControllerBase
     private readonly IMemoryCache _memoryCache;
     public CacheCotroller(IMemoryCache memoryCashe) => _memoryCache = memoryCashe;
 
-
     [HttpGet]
     public IActionResult Get()
     {
-        DateTime currentDate;
-        var alarediyExist = _memoryCache.TryGetValue("DateTime", out currentDate);
+        var time = DateTime.Now.ToString("HH:mm:ss");
+        var alarediyExist = _memoryCache.TryGetValue("DateTime", out time);
 
-        if (!alarediyExist || DateTime.UtcNow.Second - currentDate.Second > 30)
+        if (!alarediyExist)
         {
-            currentDate = DateTime.Now;
-            var cacheEntryOption = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(5));
+            time = DateTime.Now.ToString("HH:mm:ss");
+            var cacheEntryOption = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromSeconds(5));
 
-            _memoryCache.Set("DateTime", currentDate, cacheEntryOption);
+            _memoryCache.Set("DateTime", time, cacheEntryOption);
         }
-        return Ok(currentDate);
+        return Ok(time);
     }
 
 
